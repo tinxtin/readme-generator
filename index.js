@@ -57,18 +57,18 @@ async function askLibrary() {
                 type: 'input',
                 name: 'Installation',
                 message: 'Installed library:',
-                
             },
             {
-                type: 'input',
-                name: 'repeatInstall',
-                message: 'Want to enter another library?(Enter Yes/No)',
+                type: 'list',
+                name: 'askAgain',
+                message: 'Add another library?',
+                choices: ['Yes', 'No']
             },
         ]
     )
     .then((ans) => {
         installedLibrary.push( ans.Installation )
-        if ((ans.repeatInstall).toLowerCase() === 'yes') {
+        if ((ans.askAgain).toLowerCase() === 'yes') {
             return askLibrary();
         } else {
             return;
@@ -76,13 +76,37 @@ async function askLibrary() {
     })
 };
 
-const askInstruction = [
-    {
-        type: 'input',
-        name: 'Usage',
-        message: 'Step-by-step instruction to use the application.',
-    },
-]
+let stepInstructions = [];
+let step = 1;
+async function askInstruction() {
+    return await inquirer
+    .prompt(
+        [
+            {
+                type: 'input',
+                name: 'Usage',
+                message: `Instruction to use the application! Step ${step}:`,
+            },
+            {
+                type: 'list',
+                name: 'askAgain',
+                message: 'Add another step?',
+                choices: ['Yes', 'No']
+            }
+        ]
+    )
+    .then((ans) => {
+        stepInstructions = [ ...stepInstructions , ...ans.Usage ]
+        if ((ans.askAgain).toLowerCase() === 'yes') {
+            step++;
+            return askInstruction(step);
+        } else {
+            return;
+        }
+    })
+}
+
+
 
 
 // function to write README file
@@ -91,11 +115,9 @@ function writeToFile(fileName, data) {
 
 // function to initialize program
 async function init() {
-    // let ansBasics = await askDetails();
+    let ansBasics = await askDetails();
     let ansLibrary = await askLibrary();
-    // console.log(ansBasics)
-    console.log(installedLibrary)
-    // let ansInstruction = await askInstruction();
+    let ansInstruction = await askInstruction();
 }
 
 // function call to initialize program

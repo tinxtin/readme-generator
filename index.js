@@ -3,9 +3,6 @@ const path = require('path');
 const inquirer = require("inquirer");
 const generateMarkdown = require("./utils/generateMarkdown");
 
-// array of questions for user
-const libraries = [];
-
 async function askDetails() {
     return await inquirer
     .prompt(
@@ -43,12 +40,11 @@ async function askDetails() {
         ]
     )
     .then((ans) => {
-        return ans;
+        return [ans];
     })
 };
 
-const installedLibrary = [];
-
+let insLibrary = {libraries: []}
 async function askLibrary() {
     return await inquirer
     .prompt(
@@ -67,16 +63,16 @@ async function askLibrary() {
         ]
     )
     .then((ans) => {
-        installedLibrary.push( ans.Installation )
+        insLibrary.libraries.push(ans.Installation)
         if ((ans.askAgain).toLowerCase() === 'yes') {
             return askLibrary();
         } else {
-            return;
+            return [insLibrary];
         }
     })
 };
 
-let stepInstructions = [];
+let stepInstructions = {steps: []};
 let step = 1;
 async function askInstruction() {
     return await inquirer
@@ -96,12 +92,12 @@ async function askInstruction() {
         ]
     )
     .then((ans) => {
-        stepInstructions = [ ...stepInstructions , ...ans.Usage ]
+        stepInstructions.steps.push(ans.Usage)
         if ((ans.askAgain).toLowerCase() === 'yes') {
             step++;
-            return askInstruction(step);
+            return askInstruction();
         } else {
-            return;
+            return [stepInstructions];
         }
     })
 }
@@ -111,13 +107,26 @@ async function askInstruction() {
 
 // function to write README file
 function writeToFile(fileName, data) {
+    console.log(data)
+    const template = `# <h4>${data[0].Title}</h4>`
+
+    fs.writeFile('./test.md', template, (err) => {
+        if (err) {
+            console.error(err);
+          } else {
+            console.log('Nice')
+          }
+    });
 }
 
 // function to initialize program
 async function init() {
-    let ansBasics = await askDetails();
-    let ansLibrary = await askLibrary();
-    let ansInstruction = await askInstruction();
+    let ansDetail = await askDetails();
+    // let ansLibrary = await askLibrary();
+    // let ansInstruction = await askInstruction();
+    let ansAll = [...ansDetail]
+    
+    writeToFile('Readme', ansAll)
 }
 
 // function call to initialize program

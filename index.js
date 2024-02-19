@@ -37,6 +37,16 @@ async function askDetails() {
                 name: 'Test',
                 message: 'Who tested to this application?',
             },
+            {
+                type: 'input',
+                name: 'Email',
+                message: 'Enter email?',
+            },
+            {
+                type: 'input',
+                name: 'Github',
+                message: 'Enter github username?',
+            },
         ]
     )
     .then((ans) => {
@@ -108,13 +118,41 @@ async function askInstruction() {
 // function to write README file
 function writeToFile(fileName, data) {
     console.log(data)
-    const template = `# <h4>${data[0].Title}</h4>`
+    const template = `
+# ${data[0].Title}
 
-    fs.writeFile('./test.md', template, (err) => {
+## Description
+${data[0].Description}
+
+## Installation
+
+Libraries required to be installed to use this application: ${data[1].libraries}
+
+## Usage
+
+These are the simple steps on how to use this application:
+${data[2].steps}
+
+## Contributing
+
+${data[0].Contribution}
+
+## License
+[${data[0].License}](https://choosealicense.com/licenses/${data[0].License}/).
+
+## Questions
+Reach out to me with this email: ${data[0].Email}
+Happy to answer all question related to this application.
+
+## Authors
+[${data[0].Github}](https://github.com/${data[0].Github})
+`
+
+    fs.writeFile(`${fileName}.md`, template, (err) => {
         if (err) {
             console.error(err);
           } else {
-            console.log('Nice')
+            console.log('File successfully generated!')
           }
     });
 }
@@ -122,11 +160,11 @@ function writeToFile(fileName, data) {
 // function to initialize program
 async function init() {
     let ansDetail = await askDetails();
-    // let ansLibrary = await askLibrary();
-    // let ansInstruction = await askInstruction();
-    let ansAll = [...ansDetail]
+    let ansLibrary = await askLibrary();
+    let ansInstruction = await askInstruction();
+    let ansAll = [...ansDetail, ...ansLibrary, ...ansInstruction]
     
-    writeToFile('Readme', ansAll)
+    writeToFile('Read-me', ansAll)
 }
 
 // function call to initialize program

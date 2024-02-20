@@ -29,13 +29,8 @@ async function askDetails() {
             },
             {
                 type: 'input',
-                name: 'Contribution',
-                message: 'Who contributed to this application?',
-            },
-            {
-                type: 'input',
                 name: 'Test',
-                message: 'Who tested to this application?',
+                message: 'How to test this application?',
             },
             {
                 type: 'input',
@@ -53,6 +48,36 @@ async function askDetails() {
         return [ans];
     })
 };
+
+let stepContribution = {steps: []}
+let stepCon = 1;
+async function askContribution() {
+    return await inquirer
+    .prompt(
+        [
+            {
+                type: 'input',
+                name: 'Contribution',
+                message: `How to contribute to this application? Step ${stepCon}:`,
+            },
+            {
+                type: 'list',
+                name: 'askAgain',
+                message: 'Add another step?',
+                choices: ['Yes', 'No']
+            },
+        ]
+    )
+    .then((ans) => {
+        stepContribution.steps.push(ans.Contribution)
+        if ((ans.askAgain).toLowerCase() === 'yes') {
+            stepCon++;
+            return askContribution();
+        } else {
+            return [stepContribution];
+        }
+    })
+}
 
 let insLibrary = {libraries: []}
 async function askLibrary() {
@@ -83,7 +108,7 @@ async function askLibrary() {
 };
 
 let stepInstructions = {steps: []};
-let step = 1;
+let stepIns = 1;
 async function askInstruction() {
     return await inquirer
     .prompt(
@@ -91,7 +116,7 @@ async function askInstruction() {
             {
                 type: 'input',
                 name: 'Usage',
-                message: `Instruction to use the application! Step ${step}:`,
+                message: `Instruction to use the application! Step ${stepIns}:`,
             },
             {
                 type: 'list',
@@ -104,7 +129,7 @@ async function askInstruction() {
     .then((ans) => {
         stepInstructions.steps.push(ans.Usage)
         if ((ans.askAgain).toLowerCase() === 'yes') {
-            step++;
+            stepIns++;
             return askInstruction();
         } else {
             return [stepInstructions];
@@ -117,8 +142,9 @@ async function askInstruction() {
 
 // function to write README file
 function writeToFile(fileName, data) {
-    console.log(data)
     const template = `
+[![License: ${data[0].License}](https://img.shields.io/badge/License-${data[0].License}-yellow.svg)](https://opensource.org/licenses/${data[0].License})
+
 # ${data[0].Title}
 
 ## Description
@@ -126,19 +152,25 @@ ${data[0].Description}
 
 ## Installation
 
-Libraries required to be installed to use this application: ${data[1].libraries}
+Libraries required to be installed to use this application: 
+${data[1].libraries}
 
 ## Usage
 
 These are the simple steps on how to use this application:
-${data[2].steps}
+${data[3].steps}
 
 ## Contributing
+If you have a suggestion that would make this better, please fork the repo and create a pull request.
+Follow the following steps to contribute:
+${data[2].steps}
 
-${data[0].Contribution}
+## Testing
+
+${data[0].Test}
 
 ## License
-[${data[0].License}](https://choosealicense.com/licenses/${data[0].License}/).
+Distributed under the [${data[0].License}](https://choosealicense.com/licenses/${data[0].License}/) License.
 
 ## Questions
 Reach out to me with this email: ${data[0].Email}
@@ -161,8 +193,9 @@ Happy to answer all question related to this application.
 async function init() {
     let ansDetail = await askDetails();
     let ansLibrary = await askLibrary();
+    let ansContribution = await askContribution();
     let ansInstruction = await askInstruction();
-    let ansAll = [...ansDetail, ...ansLibrary, ...ansInstruction]
+    let ansAll = [...ansDetail, ...ansLibrary , ...ansContribution,  ...ansInstruction]
     
     writeToFile('Read-me', ansAll)
 }

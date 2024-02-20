@@ -44,3 +44,6 @@ Happy to answer all question related to this application.
 
 ## Authors
 [tinxtin](https://github.com/tinxtin)
+
+## Walkthrough media
+[video](./media/walkthrough.mkv)

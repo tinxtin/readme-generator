@@ -143,7 +143,17 @@ async function askInstruction() {
 // function to write README file
 function writeToFile(fileName, data) {
     const template = `
-[![License: ${data[0].License}](https://img.shields.io/badge/License-${data[0].License}-yellow.svg)](https://opensource.org/licenses/${data[0].License})
+[![License: ${data[0].License}](https://img.shields.io/badge/License-${(data[0].License).toLowerCase()}-yellow.svg)](https://opensource.org/licenses/${data[0].License})
+
+## Table of content
+- [Description](#Description)
+- [Installation](#Installation)
+- [Usage](#Usage)
+- [Contributing](#Contributing)
+- [Testing](#Testing)
+- [License](#License)
+- [Questions](#Questions)
+- [Authors](#Authors)
 
 # ${data[0].Title}
 

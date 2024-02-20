@@ -87,12 +87,12 @@ async function askLibrary() {
             {
                 type: 'input',
                 name: 'Installation',
-                message: 'Installed library:',
+                message: 'Installation steps:',
             },
             {
                 type: 'list',
                 name: 'askAgain',
-                message: 'Add another library?',
+                message: 'Add another step?',
                 choices: ['Yes', 'No']
             },
         ]
@@ -143,7 +143,7 @@ async function askInstruction() {
 // function to write README file
 function writeToFile(fileName, data) {
     const template = `
-[![License: ${data[0].License}](https://img.shields.io/badge/License-${(data[0].License).toLowerCase()}-yellow.svg)](https://opensource.org/licenses/${data[0].License})
+[![License: ${data[0].License}](https://img.shields.io/badge/License-${(data[0].License).toLowerCase()}-yellow.svg)](https://opensource.org/licenses/${(data[0].License).toLowerCase()})
 
 ## Table of content
 - [Description](#Description)
@@ -162,7 +162,7 @@ ${data[0].Description}
 
 ## Installation
 
-Libraries required to be installed to use this application: 
+Software and libraries required to be installed to use this application: 
 ${data[1].libraries}
 
 ## Usage
@@ -180,7 +180,7 @@ ${data[2].steps}
 ${data[0].Test}
 
 ## License
-Distributed under the [${data[0].License}](https://choosealicense.com/licenses/${data[0].License}/) License.
+Distributed under the [${data[0].License}](https://choosealicense.com/licenses/${(data[0].License).toLowerCase()}/) License.
 
 ## Questions
 Reach out to me with this email: ${data[0].Email}
@@ -207,7 +207,7 @@ async function init() {
     let ansInstruction = await askInstruction();
     let ansAll = [...ansDetail, ...ansLibrary , ...ansContribution,  ...ansInstruction]
     
-    writeToFile('Read-me', ansAll)
+    writeToFile('README', ansAll)
 }
 
 // function call to initialize program

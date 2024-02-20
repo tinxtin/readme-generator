@@ -162,17 +162,17 @@ ${data[0].Description}
 
 ## Installation
 
-Software and libraries required to be installed to use this application:\
+Software and libraries required to be installed to use this application:  
 ${data[1].libraries}
 
 ## Usage
 
-These are the simple steps on how to use this application:\
+These are the simple steps on how to use this application:  
 ${data[3].steps}
 
 ## Contributing
-If you have a suggestion that would make this better, please fork the repo and create a pull request.\
-Follow the following steps to contribute:\
+If you have a suggestion that would make this better, please fork the repo and create a pull request.  
+Follow the following steps to contribute:  
 ${data[2].steps}
 
 ## Testing
@@ -183,7 +183,7 @@ ${data[0].Test}
 Distributed under the [${data[0].License}](https://choosealicense.com/licenses/${(data[0].License).toLowerCase()}/) License.
 
 ## Questions
-Reach out to me with this email: ${data[0].Email}.\ 
+Reach out to me with this email: ${data[0].Email}.  
 Happy to answer all question related to this application.
 
 ## Authors

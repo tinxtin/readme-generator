@@ -46,4 +46,4 @@ Happy to answer all question related to this application.
 [tinxtin](https://github.com/tinxtin)
 
 ## Walkthrough media
-[video](./media/walkthrough.mkv)
+[video](./walkthrough.mp4)
